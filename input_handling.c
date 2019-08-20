@@ -36,3 +36,20 @@ int parse_input(char *input)
     }
     return i;
 }
+
+void parse_dir(char * inp, char*** dir) {
+    int index = 0;
+    while(*dir[index] != NULL) index++;
+    if (inp[0] == '.' && strlen(inp) == 1) {
+        *dir[index] = cur_dir;
+    }
+    else if(inp[0] == '~') {
+        *dir[index] = home_dir;
+    }
+    else {
+        char *p = (char *) malloc ((strlen(cur_dir) + strlen(home_dir) + strlen(inp)) * sizeof(char));
+        realpath(inp, p);
+        *dir[index] = p;
+    }
+    return;
+}

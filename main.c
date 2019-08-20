@@ -5,13 +5,15 @@
 
 int main()
 {
+    gethd(home_dir, getpid());
     while (1)
     {
-        // display_self();
+        display_shell();
 
         char *input_buffer = NULL;
         size_t len = 0;
         int n_read = getline(&input_buffer, &len, stdin);
+        input_buffer[strlen(input_buffer)-1] = NULL;
         command = (cmd *)malloc(sizeof(cmd) * n_read);
         bckgrnd = (_Bool *) malloc (sizeof(_Bool) * n_read);
         cmd_num = parse_input(input_buffer);
@@ -30,8 +32,7 @@ int main()
             write(1, "\n", 1);
 
         }
-
-        execute(0);
+        for(int i=0; i<cmd_num; i++) execute(i);
         free(input_buffer);
         free(command);
     }

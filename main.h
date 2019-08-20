@@ -5,5 +5,5 @@ typedef struct commands {
 
 cmd *command;
 _Bool *bckgrnd;
-char *cur_dir, *home_dir;
+char cur_dir[10000], home_dir[10000];
 int cmd_num;
