@@ -1,21 +1,21 @@
 #include "decl.h"
+#include "defs.h"
+#include "main.h"   
 // #include "junction.h"
 
 int main()
 {
     while (1)
     {
+        // display_self();
+
         char *input_buffer = NULL;
         size_t len = 0;
-
-
         int n_read = getline(&input_buffer, &len, stdin);
         command = (cmd *)malloc(sizeof(cmd) * n_read);
         bckgrnd = (_Bool *) malloc (sizeof(_Bool) * n_read);
-        int cmd_num = parse_input(input_buffer, &bckgrnd);
+        cmd_num = parse_input(input_buffer);
 
-        printf("%d bytes read\n", n_read);
-        write(1, input_buffer, n_read);
         printf("%d commands in total\n", cmd_num);
         write(1, "\n", 1);
         for (int i = 0; i < cmd_num; i++)
@@ -25,10 +25,13 @@ int main()
             fflush(stdout);
             for (int j=0; command[i].arguments[j] != NULL; j++) {
                 write(1, command[i].arguments[j], strlen(command[i].arguments[j]));
-                write(1, "\n", 1);
+                write(1, "\n\t\t ", 4);
             }
+            write(1, "\n", 1);
+
         }
-        // execute(cmd_num, command);
+
+        execute(0);
         free(input_buffer);
         free(command);
     }
