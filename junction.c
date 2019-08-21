@@ -1,6 +1,5 @@
 #include "decl.h"
 #include "defs.h"
-// #include "main.h"
 
 void execute(int cmd) {
     if(!strcmp(command[cmd].command, "clear")) {
@@ -10,13 +9,7 @@ void execute(int cmd) {
         exit(0);
     }
     else if(!strcmp(command[cmd].command, "ls")) {
-       // ls(command[cmd], bckgrnd[cmd]);
-        printf("This is ls");
-        char **dir;
-        dir = (char **) malloc (sizeof(char*));
-        dir[0] = NULL;
-        parse_dir(command[cmd].arguments[0], &dir);
-        printf("The path is: %s\n", dir[0]);
+    //    ls(command[cmd]);
     }
     else if(!strcmp(command[cmd].command, "cd")) {
        cd(command[cmd]);
@@ -26,8 +19,8 @@ void execute(int cmd) {
         printf("This is ls");
     } 
     else if(!strcmp(command[cmd].command, "pwd")) {
-       // pwd(command[cmd], bckgrnd[cmd]);
-        printf("This is ls");
+        getcwd(cur_dir, sizeof(cur_dir));
+        printf("Present Working Directory: %s\n", cur_dir);
     } 
     else if(!strcmp(command[cmd].command, "pinfo")) {
       //  pinfo(command[cmd], bckgrnd[cmd]);
@@ -44,7 +37,8 @@ void execute(int cmd) {
     } 
     else {
       //  sys(command[cmd], bckgrnd[cmd]);
-        printf("This is ls");
+      if(command[cmd].command[0] >= 'a' && command[cmd].command[0] <='z') printf("Yet to decide what to do with you!\n");
+      else printf("Not a valid command dude!\n");
     }
     return;
 }
