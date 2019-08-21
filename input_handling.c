@@ -36,23 +36,39 @@ int parse_input(char *input)
     return i;
 }
 
-void parse_dir(char * inp, char*** dir) {
+void parse_dir(char ** inp, char*** dir, char * cmd) {
     int index = 0;
     while(*dir[index] != NULL) index++;
-    if (inp[0] == '.' && strlen(inp) == 1) {
-        *dir[index] = cur_dir;
+    
+    if(inp[index] == NULL) {
+        inp[index] = "~";
     }
-    else if(inp[0] == '~') {
-        char temp[50000];
-        for(int i=0;i<strlen(home_dir); i++) temp[i] = home_dir[i];
-        temp[strlen(home_dir)] = '\0';
-        strcat(temp, &inp[1]);
-        *dir[index] = temp;
-    }
-    else {
-        char *p = (char *) malloc ((strlen(cur_dir) + strlen(home_dir) + strlen(inp)) * sizeof(char));
-        realpath(inp, p);
-        *dir[index] = p;
+
+    while(inp[index] != NULL) {
+        
+        if(inp[index][0] == '"' | inp[index][0] == '\'') {
+            char temp[50000];
+            combine(inp, inp[index][0], temp);
+            inp[index] = temp;
+        }
+
+        if (inp[index][0] == '.' && strlen(inp[index]) == 1) {
+            *dir[index] = cur_dir;
+        }
+        else if(inp[index][0] == '~') {
+            char temp[50000];
+            for(int i=0;i<strlen(home_dir); i++) temp[i] = home_dir[i];
+            temp[strlen(home_dir)] = '\0';
+            strcat(temp, &inp[index][1]);
+            *dir[index] = temp;
+        }
+        else {
+            char *p = (char *) malloc ((strlen(cur_dir) + strlen(home_dir) + strlen(inp[index])) * sizeof(char));
+            realpath(inp[index], p);
+            *dir[index] = p;
+        }
+        index++;
+        if (!strcmp(cmd,"cd")) break; 
     }
     return;
 }
