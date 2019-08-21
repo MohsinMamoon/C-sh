@@ -1,6 +1,6 @@
 #include "decl.h"
 #include "defs.h"
-#include "main.h"
+// #include "main.h"
 
 void execute(int cmd) {
     if(!strcmp(command[cmd].command, "clear")) {
@@ -19,8 +19,7 @@ void execute(int cmd) {
         printf("The path is: %s\n", dir[0]);
     }
     else if(!strcmp(command[cmd].command, "cd")) {
-       // cd(command[cmd], bckgrnd[cmd]);
-        printf("This is ls");
+       cd(command[cmd]);
     } 
     else if(!strcmp(command[cmd].command, "echo")) {
       //  echo(command[cmd], bckgrnd[cmd]);

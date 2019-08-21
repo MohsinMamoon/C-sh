@@ -1,6 +1,6 @@
 #include "decl.h"
 #include "defs.h"
-#include "main.h"   
+// #include "main.h"   
 // #include "junction.h"
 
 int main()
@@ -13,7 +13,7 @@ int main()
         char *input_buffer = NULL;
         size_t len = 0;
         int n_read = getline(&input_buffer, &len, stdin);
-        input_buffer[strlen(input_buffer)-1] = NULL;
+        input_buffer[strlen(input_buffer)-1] = '\0';
         command = (cmd *)malloc(sizeof(cmd) * n_read);
         bckgrnd = (_Bool *) malloc (sizeof(_Bool) * n_read);
         cmd_num = parse_input(input_buffer);
