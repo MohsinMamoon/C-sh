@@ -16,3 +16,4 @@ void sys(cmd command, _Bool back);
 int parse_dir(char ** inp, char** dir, char * cmd, char* final);
 void interrupt(int time);
 void dirty(int time);
+int redirect(cmd command);

@@ -6,6 +6,7 @@ int parse_command(char *input_cmd, int index)
     char *ptr = input_cmd, *save_ptr, delim[] = " \t";
     int j = 0;
     if(ptr == NULL) return index - 1;
+    command[index].in_redir = command[index].out_redir = command[index].append = 0;
     command[index].command = strtok_r(ptr, delim, &save_ptr);
     for (j = 0, ptr = (char*)NULL;; j++, ptr = (char *)NULL)
     {
@@ -26,6 +27,23 @@ int parse_command(char *input_cmd, int index)
                 index = parse_command(strtok_r(ptr, delim, &save_ptr), index+1);
             }
             break;
+        }
+        if(command[index].arguments[j][0] == '>' || command[index].arguments[j][0] == '<') {
+            switch (command[index].arguments[j][0])
+            {
+            case '>':
+                if(command[index].arguments[j][1] == '>') {
+                    command[index].append = 1;
+                }
+                command[index].out_redir = 1;
+                command[index].out = strtok_r(ptr, delim, &save_ptr);
+                break;
+            case '<':
+                command[index].in_redir = 1;
+                command[index].in = strtok_r(ptr, delim, &save_ptr);
+                break;
+            }
+            j--;
         }
     }
     return index;
