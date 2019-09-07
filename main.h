@@ -5,6 +5,7 @@ typedef struct commands {
     char *arguments[1000];
     char *in, *out;
     _Bool in_redir, out_redir, append;
+    int pipe_in, pipe_out;
 } cmd;
 
 cmd *command;
@@ -14,3 +15,4 @@ static int cmd_num, his_num = 0;
 FILE *his_fd;
 char his[20000];
 int orig_stdin, orig_stdout;
+int *pipe_fd, pipe_no, i_pip;
