@@ -7,13 +7,24 @@ int parse_command(char *input_cmd, int index)
     int j = 0;
     if(ptr == NULL) return index - 1;
     command[index].in_redir = command[index].out_redir = command[index].append = 0;
+    command[index].pipe_in = command[index].pipe_out = -1;
+    if(index != 0) {
+        if(command[index-1].pipe_out != -1) {
+            command[index].pipe_in = command[index - 1].pipe_out - 1;
+        }
+    }
     command[index].command = strtok_r(ptr, delim, &save_ptr);
     for (j = 0, ptr = (char*)NULL;; j++, ptr = (char *)NULL)
     {
         command[index].arguments[j] = strtok_r(ptr, delim, &save_ptr);
         if (command[index].arguments[j] == (char *)NULL)
             break;
-        if(!strncmp(command[index].arguments[j],"&", 1) || !strncmp(command[index].command, "&", 1)){ 
+        else if(
+            !strncmp(command[index].arguments[j],"&", 1) || 
+            !strncmp(command[index].command, "&", 1) || 
+            !strncmp(command[index].arguments[j],"|", 1) || 
+            !strncmp(command[index].command, "|", 1)
+            ){ 
             delim[0] = delim[1] = '\0';
             
             if(!strncmp(command[index].command, "&", 1)) {
@@ -21,14 +32,27 @@ int parse_command(char *input_cmd, int index)
                 index = parse_command(strtok_r(ptr, delim, &save_ptr), index);
             }
 
-            else {
+            else if(!strncmp(command[index].arguments[j],"&", 1)) {
                 command[index].arguments[j] = NULL;
                 bckgrnd[index] = 1;
                 index = parse_command(strtok_r(ptr, delim, &save_ptr), index+1);
             }
+
+            else if(!strncmp(command[index].arguments[j], "|", 1)) {
+                pipe_no++;
+                command[index].pipe_out = i_pip;
+                i_pip += 2;
+                command[index].arguments[j] = NULL;
+                index = parse_command(strtok_r(ptr, delim, &save_ptr), index+1);
+            }
+            
+            else {
+                fprintf(stderr, "Parsing Error: Invalid Syntax!\n");
+                index = -1;
+            }
             break;
         }
-        if(command[index].arguments[j][0] == '>' || command[index].arguments[j][0] == '<') {
+        else if(command[index].arguments[j][0] == '>' || command[index].arguments[j][0] == '<') {
             switch (command[index].arguments[j][0])
             {
             case '>':
@@ -59,6 +83,7 @@ int parse_input(char *input)
         if (ptr2 == NULL)
             break;
         i = parse_command(ptr2, i);
+        if(i == -1) break;
     }
     return i;
 }
