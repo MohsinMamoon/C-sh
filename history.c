@@ -33,7 +33,7 @@ void add_to_hist(char *input, int size) {
     if(his_num >= 20) {
         int sep_ind;
         for(int k=0;;k++) {
-            if(his[k] == '|') {
+            if(his[k] == '+') {
                 sep_ind = k;
                 break;
             }
@@ -48,7 +48,7 @@ void add_to_hist(char *input, int size) {
             }
             his[i] = input[j];
         }
-        his[i++] = '|';
+        his[i++] = '+';
         his[i] = '\0';
     }
     else {
@@ -56,33 +56,44 @@ void add_to_hist(char *input, int size) {
         for(i=strlen(his), j=0; j< size; i++, j++) {
             his[i] = input[j];
         }
-        his[i] = '|'; 
+        his[i] = '+'; 
     }
     store_hist();
 }
 
 void history(cmd command) {
-    load_hist();
-    int num = -1, start=0, print = 21;
-    if(command.arguments[0] != NULL) {
-        if(sscanf(command.arguments[0], "%d", &num) <= 0) {
-            printf("Invalid input number! Defaulting to 10");
-            num = 10;
-        }
+    int pid = fork();
+    if(pid) {
+        wait(NULL);
     }
-    if (num <= 0 || num > 20) num = 10;
-    print = print-num;
-    for(int i=0, j=strlen(his)-2;; j--) {
-        if(his[j] == '|') i++;
-        if(j == 0 || i == num) {
-            start = j;
-            break;
+    else if(pid == 0) {
+        load_hist();
+        int num = -1, start=0, print = his_num+1;
+        if(command.arguments[0] != NULL) {
+            if(sscanf(command.arguments[0], "%d", &num) <= 0) {
+                fprintf(stderr, "Invalid input number! Defaulting to 10");
+                num = 10;
+            }
         }
+        if (num <= 0 || num > 20) num = (10 < his_num) ? 10 : his_num;
+        print = print-num;
+        for(int i=0, j=strlen(his)-2;; j--) {
+            if(his[j] == '+') i++;
+            if(j == 0 || i == num) {
+                start = j;
+                break;
+            }
+        }
+        char *ptr = &his[start], delim[] = "+", *token, *save_ptr;
+        for(;;ptr = NULL) {
+            token = strtok_r(ptr, delim, &save_ptr);
+            if(token == NULL) break;
+            printf("%d: %s\n", print++, token);
+        }
+        exit(0);
     }
-    char *ptr = &his[start], delim[] = "|", *token, *save_ptr;
-    for(;;ptr = NULL) {
-        token = strtok_r(ptr, delim, &save_ptr);
-        if(token == NULL) break;
-        printf("%d: %s\n", print++, token);
+    else {
+        fprintf(stderr, "Fork Error!\n");
+        return;
     }
 }

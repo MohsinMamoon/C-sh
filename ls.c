@@ -52,66 +52,76 @@ void show_dir(DIR *D,char *path) {
 }
 
 void ls(cmd command) {
-    char *dir[1000], temp[8000];
-    memset(temp, 0, sizeof(temp));
-    temp[0] = '-';
-    memset(dir, 0, sizeof(dir));
-    int mode = parse_dir(command.arguments, dir, "ls", temp);
-
-    switch (mode)
-    {
-    case 0:
-        a_flag = 0;
-        l_flag = 0;
-        break;
-    case 1:
-        a_flag = 0;
-        l_flag = 1;
-        break;
-    case 2:
-        a_flag = 1;
-        l_flag = 0;
-        break;
-    case 3:
-        a_flag = 1;
-        l_flag = 1;
-        break;
-    default:
-        break;
+    int pid = fork();
+    if(pid) {
+        wait(NULL);
     }
-    
-    if(dir[0] == NULL) {
-        dir[0] = ".";
+    else if (pid == 0) {
+        char *dir[1000], temp[8000];
+        memset(temp, 0, sizeof(temp));
         temp[0] = '-';
-        temp[1] = '.';
-        temp[2] = '-';
-        temp[3] = '\0';
-    }
+        memset(dir, 0, sizeof(dir));
+        int mode = parse_dir(command.arguments, dir, "ls", temp);
 
-    char *ptr1 = temp, *token, *save_ptr, delim[] = "-";
-    int i=0;
-    for(;; i++, ptr1 = NULL) {
-        token = strtok_r(ptr1, delim, &save_ptr);
-        if(token == NULL) break;
-        
-        struct stat st;
+        switch (mode)
+        {
+        case 0:
+            a_flag = 0;
+            l_flag = 0;
+            break;
+        case 1:
+            a_flag = 0;
+            l_flag = 1;
+            break;
+        case 2:
+            a_flag = 1;
+            l_flag = 0;
+            break;
+        case 3:
+            a_flag = 1;
+            l_flag = 1;
+            break;
+        default:
+            break;
+        }
 
-        if(!strcmp(dir[i], "W_PATH") || stat(dir[i], &st)) {
-            printf("ls: could not access: File or Directory does not exist!\n");
-            continue;
+        if(dir[0] == NULL) {
+            dir[0] = ".";
+            temp[0] = '-';
+            temp[1] = '.';
+            temp[2] = '-';
+            temp[3] = '\0';
         }
-        printf("\n");
-        if(S_ISDIR(st.st_mode)) {
-            if(dir[1] != NULL) printf("%s:\n", token);
-            DIR *D = opendir(dir[i]);
-            show_dir(D, dir[i]);
-            closedir(D);
+
+        char *ptr1 = temp, *token, *save_ptr, delim[] = "-";
+        int i=0;
+        for(;; i++, ptr1 = NULL) {
+            token = strtok_r(ptr1, delim, &save_ptr);
+            if(token == NULL) break;
+
+            struct stat st;
+
+            if(!strcmp(dir[i], "W_PATH") || stat(dir[i], &st)) {
+                fprintf(stderr, "ls: could not access: File or Directory does not exist!\n");
+                continue;
+            }
+            printf("\n");
+            if(S_ISDIR(st.st_mode)) {
+                if(dir[1] != NULL) printf("%s:\n", token);
+                DIR *D = opendir(dir[i]);
+                show_dir(D, dir[i]);
+                closedir(D);
+            }
+            else {
+                if(!l_flag) printf("%s\n", token);
+                p_ls(token, st);            
+            }
+            printf("\n\n");
         }
-        else {
-            if(!l_flag) printf("%s\n", token);
-            p_ls(token, st);            
-        }
-        printf("\n");
+        exit(0);
     }
-    return;
+    else {
+        fprintf(stderr, "Fork Error!\n");
+        return;
+    }
 }

@@ -7,9 +7,7 @@ void cd(cmd command){
     memset(dir, 0, sizeof(dir));
     parse_dir(command.arguments, dir, "cd", (char *)NULL);
     if(chdir(dir[0])){
-        perror("Error");
-        write(2, cur_dir, strlen(cur_dir));
-        write(2, "\n", 1);
+        fprintf(stderr, "Error: File or Directory doesnot exist!\n pwd: %s\n", cur_dir);
     }
     getcwd(cur_dir, sizeof(cur_dir));
     free(dir);
