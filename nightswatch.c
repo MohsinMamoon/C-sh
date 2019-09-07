@@ -82,7 +82,7 @@ void nightswatch (cmd command, _Bool back) {
     else mode = 0;
 
     if(mode == 0) {
-        printf("Invalid arguments! Usage: nightswatch -n <seconds> <command>\n");
+        fprintf(stderr, "Invalid arguments! Usage: nightswatch -n <seconds> <command>\n");
         return;
     }
     else{

@@ -29,12 +29,11 @@ void sys(cmd command, _Bool back) {
         // sleep(2);
         if(back) setpgid(0,0);
         execvp(args[0], args);
-        perror("Execution Error: ");
-        printf("\n");
+        fprintf(stderr, "Execution error: Command not found!\n");
         exit(0);
     }
     else {
-        printf("Forking error\n\n");
+        fprintf(stderr, "Forking error\n\n");
         exit(1);
     }
     return;
