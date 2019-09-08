@@ -86,21 +86,33 @@ void nightswatch (cmd command, _Bool back) {
         return;
     }
     else{
-
-
         int pid = fork();
 
         if(pid != 0) {
+            
+            if(command.pipe_out != -1) close(pipe_fd[command.pipe_out]);
+            
             if(!back){ 
                 tcgetattr(0, &orig);
                 modif = orig;
                 modif.c_lflag &= ~ICANON;
                 tcsetattr(0, TCSANOW, &modif);
-                wait (NULL);
+                waitpid(pid, NULL, WUNTRACED);
                 tcsetattr(0, TCSANOW, &orig);
             }
         }
         else if(pid == 0) {
+            signal(SIGINT, SIG_DFL);
+            signal(SIGTSTP, back_send);
+
+            if(command.pipe_in != -1 || command.pipe_out != -1) {
+                if(command.pipe_in != -1) dup2(pipe_fd[command.pipe_in], 0);
+                if(command.pipe_out != -1) dup2(pipe_fd[command.pipe_out], 1);
+                for(int i=0; i<2*pipe_no; i++) {
+                    close(pipe_fd[i]);
+                }
+            }
+        
             if(back) setpgid(0,0);
             if(mode == 1) interrupt(time);
             else dirty(time);

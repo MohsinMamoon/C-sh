@@ -1,16 +1,6 @@
 #include "defs.h"
 #include "decl.h"
-void back_end(int sig) {
-    int p_id, ext_stat;
-    while((p_id = waitpid(-1, &ext_stat, WUNTRACED | WNOHANG)) >= 1) {
-        if(WIFEXITED(ext_stat)) {
-            fprintf(stderr, "Process with pid %d terminated normally with status %d!\n\n", p_id, WEXITSTATUS(ext_stat));
-        }
-        else if(WIFSIGNALED(ext_stat)) {
-            fprintf(stderr, "Process with pid %d terminated by signal %d!\n\n", p_id, WTERMSIG(ext_stat));
-        }
-    }
-}
+
 void sys(cmd command, _Bool back) {
     char* args[1000];
     args[0] = command.command;
@@ -22,12 +12,21 @@ void sys(cmd command, _Bool back) {
 
     if(pid != 0) {
         // Parent
-        if(!back) wait(NULL);
+        if(command.pipe_out != -1) close(pipe_fd[command.pipe_out]);
+        
+        if(!back) waitpid(pid, NULL, WUNTRACED);
     }
     else if(pid == 0) {
         // Child
-        // sleep(2);
-        if(back) setpgid(0,0);
+        if(command.pipe_in != -1 || command.pipe_out != -1) {
+            if(command.pipe_in != -1) dup2(pipe_fd[command.pipe_in], 0);
+            if(command.pipe_out != -1) dup2(pipe_fd[command.pipe_out], 1);
+            for(int i=0; i<2*pipe_no; i++) {
+                close(pipe_fd[i]);
+            }
+        }
+        
+                if(back) setpgid(0,0);
         execvp(args[0], args);
         fprintf(stderr, "Execution error: Command not found!\n");
         exit(0);

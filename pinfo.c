@@ -4,9 +4,22 @@
 void pinfo(cmd command) {
     int pid = fork();
     if(pid) {
+        if(command.pipe_out != -1) close(pipe_fd[command.pipe_out]);
+
         wait(NULL);
     }
     else if(pid == 0) {
+        signal(SIGINT, SIG_DFL);
+        signal(SIGTSTP, back_send);
+
+        if(command.pipe_in != -1 || command.pipe_out != -1) {
+            if(command.pipe_in != -1) dup2(pipe_fd[command.pipe_in], 0);
+            if(command.pipe_out != -1) dup2(pipe_fd[command.pipe_out], 1);
+            for(int i=0; i<2*pipe_no; i++) {
+                close(pipe_fd[i]);
+            }
+        }
+        
         char home[1000], s_pid[20], memory[100], stat_path[1000], stat_in[1000], exec_path[]="/proc/", temp2[] = "/stat", temp3[] = "/exe", p_status;
         memset(stat_path, 0, sizeof(stat_path));
         size_t len = 0;
