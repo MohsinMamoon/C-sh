@@ -24,6 +24,12 @@ int redirect(cmd command);
 // Piping related
 void pipes_setup();
 void pipes_done();
+void piping_begin(cmd command);
+void out_close(cmd command);
+
+// Background jobs related
+void add_job(int pid);
+void rem_job(int job_id);
 
 // Supported commands
 void ls(cmd command);
@@ -33,3 +39,8 @@ void pinfo(cmd command);
 void nightswatch(cmd command, _Bool back);
 void history(cmd command);
 void sys(cmd command, _Bool back);
+void jobs(cmd command);
+void kjob(cmd command);
+void fg(cmd command);
+void bg(cmd command);
+void overkill();

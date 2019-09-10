@@ -1,5 +1,16 @@
 #include <stdio.h>
 
+typedef struct jb {
+    char job_name[1000];
+    int job_id;
+    int job_pid;
+    _Bool in_back;
+}job;
+
+job background[1000];
+int no_of_jobs;
+
+
 typedef struct commands {
     char *command;
     char *arguments[1000];

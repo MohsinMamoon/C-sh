@@ -3,19 +3,6 @@
 
 void execute(int cmd)
 {
-   // fg commmand (Beta version)
-   if(!strncmp(command[cmd].command, "fg", 2)) {
-      signal(SIGTTOU, SIG_IGN);
-      int pid;
-      sscanf(command[cmd].arguments[0], "%d", &pid);
-      setpgid(pid, tcgetpgrp(0));
-      tcsetpgrp(0, pid);
-      kill(pid, SIGCONT);
-      wait(NULL);
-      tcsetpgrp(0, getpid());
-      signal(SIGTTOU, SIG_DFL);
-   }
-
    // Redirection Setup
    if (command[cmd].in_redir || command[cmd].out_redir){
       if(!redirect(command[cmd])){
@@ -26,7 +13,7 @@ void execute(int cmd)
    }
 
    // Clear Screen
-   if (!strcmp(command[cmd].command, "clear")) {
+   if (!strcmp(command[cmd].command, "clear") || command[cmd].command[0] == '\f') {
       printf("\e[1;1H\e[2J");
    }
 
@@ -97,6 +84,73 @@ void execute(int cmd)
    */
    else if (!strcmp(command[cmd].command, "history")) {
       history(command[cmd]);
+   }
+
+   /*
+      jobs:
+         syntax: jobs
+   */
+  else if(!strcmp(command[cmd].command, "jobs")) {
+   jobs(command[cmd]);
+  }
+
+  /*
+      kjob:
+         syntax: kjob [job] [signal]
+         [job]: job number from jobs
+         [signal]: signal number
+   */
+  else if(!strcmp(command[cmd].command, "kjob")) {
+     kjob(command[cmd]);
+  }
+
+   /*
+      fg:
+         syntax: fg [job]
+         [job]: if not given, last job will be considered
+   */
+   else if(!strcmp(command[cmd].command, "fg")) {
+      fg(command[cmd]);
+   }
+
+   /*
+      bg:
+         syntax: bg [job]
+         [job]: if not given, last job will be considered
+   */
+   else if(!strcmp(command[cmd].command, "bg")) {
+      bg(command[cmd]);
+   }
+
+   /*
+      overkill: 
+            syntax: overkill
+   */
+  else if(!strcmp(command[cmd].command, "overkill")) {
+     overkill();
+  }
+   /*
+      Up arrows:
+   */
+   else if(command[cmd].command[0] == '\033') {
+      int up_arr = 0, start=0, size=0;
+      char s[5];
+      for(int i=2; i<strlen(command[cmd].command); i += 3){
+         if(command[cmd].command[i] == 'A') up_arr++;
+      }
+      for(int i=strlen(his)-2, j=0; i>=0; i--) {
+         if(his[i] == '+') j++;
+         if(j == up_arr) {
+            start = i+1;
+            break;
+         }
+      }
+      for(int i=start; i<strlen(his); i++) {
+         if(his[i] == '+') break;
+         size++;
+      }
+      write(1, &his[start], size);
+      return;
    }
 
    /* 
