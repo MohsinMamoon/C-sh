@@ -9,6 +9,7 @@ int main()
     printf("\e[1;1H\e[2J");         
     gethd(home_dir, getpid());
     init_hist();
+    no_of_jobs = 0;
 
     while (1)
     {
@@ -26,7 +27,7 @@ int main()
         // Taking input
         int n_read = getline(&input_buffer, &len, stdin);
         input_buffer[n_read-1] = '\0';
-        add_to_hist(input_buffer, n_read-1);
+        if(input_buffer[0] != '\033' && input_buffer[0] != '\f') add_to_hist(input_buffer, n_read-1);
 
         // Setting up commands
         command = (cmd *)malloc(sizeof(cmd) * n_read);

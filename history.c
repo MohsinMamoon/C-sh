@@ -1,14 +1,6 @@
 #include "defs.h"
 #include "decl.h"
 
-void init_hist() {
-    if(access(hist_dir, F_OK) == -1) {
-        his_fd = fopen(hist_dir, "a+");
-        fprintf(his_fd, "%d\n", his_num);
-        fclose(his_fd);
-    }
-}
-
 void load_hist() {
     his_fd = fopen(hist_dir, "r+");
     fseek(his_fd, 0, SEEK_SET);
@@ -16,6 +8,15 @@ void load_hist() {
     fseek(his_fd, 1, SEEK_CUR);
     fscanf(his_fd, "%[^\n]s", his);
     fclose(his_fd);
+}
+
+void init_hist() {
+    if(access(hist_dir, F_OK) == -1) {
+        his_fd = fopen(hist_dir, "a+");
+        fprintf(his_fd, "%d\n", his_num);
+        fclose(his_fd);
+    }
+    load_hist();
 }
 
 void store_hist() {
@@ -64,21 +65,14 @@ void add_to_hist(char *input, int size) {
 void history(cmd command) {
     int pid = fork();
     if(pid) {
-        if(command.pipe_out != -1) close(pipe_fd[command.pipe_out]);
-
+        out_close(command);
         wait(NULL);
     }
     else if(pid == 0) {
         signal(SIGINT, SIG_DFL);
         signal(SIGTSTP, back_send);
 
-        if(command.pipe_in != -1 || command.pipe_out != -1) {
-            if(command.pipe_in != -1) dup2(pipe_fd[command.pipe_in], 0);
-            if(command.pipe_out != -1) dup2(pipe_fd[command.pipe_out], 1);
-            for(int i=0; i<2*pipe_no; i++) {
-                close(pipe_fd[i]);
-            }
-        }
+        piping_begin(command);
 
         load_hist();
         int num = -1, start=0, print = his_num+1;

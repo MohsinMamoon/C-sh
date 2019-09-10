@@ -6,27 +6,25 @@ void sys(cmd command, _Bool back) {
     args[0] = command.command;
     for(int i=0;; i++) {
         if((args[i+1] = command.arguments[i]) == NULL) break;
-    }
+}
 
     int pid = fork();
 
     if(pid != 0) {
         // Parent
-        if(command.pipe_out != -1) close(pipe_fd[command.pipe_out]);
-        
-        if(!back) waitpid(pid, NULL, WUNTRACED);
+        out_close(command);
+        if(!back) {
+            waitpid(pid, NULL, WUNTRACED);
+        }
+        if(back || !kill(pid, 0)) {
+            add_job(pid);
+        }
     }
     else if(pid == 0) {
         // Child
-        if(command.pipe_in != -1 || command.pipe_out != -1) {
-            if(command.pipe_in != -1) dup2(pipe_fd[command.pipe_in], 0);
-            if(command.pipe_out != -1) dup2(pipe_fd[command.pipe_out], 1);
-            for(int i=0; i<2*pipe_no; i++) {
-                close(pipe_fd[i]);
-            }
-        }
+        piping_begin(command);
         
-                if(back) setpgid(0,0);
+        if(back) setpgid(0,0);
         execvp(args[0], args);
         fprintf(stderr, "Execution error: Command not found!\n");
         exit(0);

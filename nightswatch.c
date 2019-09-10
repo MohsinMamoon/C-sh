@@ -100,6 +100,9 @@ void nightswatch (cmd command, _Bool back) {
                 waitpid(pid, NULL, WUNTRACED);
                 tcsetattr(0, TCSANOW, &orig);
             }
+            if(back || !kill(pid, 0)) {
+                add_job(pid);
+            }
         }
         else if(pid == 0) {
             signal(SIGINT, SIG_DFL);
