@@ -44,3 +44,6 @@ void kjob(cmd command);
 void fg(cmd command);
 void bg(cmd command);
 void overkill();
+void get_env(cmd command);
+void set_env(cmd command);
+void unset_env(cmd command);

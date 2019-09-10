@@ -22,115 +22,145 @@ void execute(int cmd)
       exit(0);
    }
 
-   /*
-      ls: 
-         syntax: ls [options] [files/directory]
-         [options]: -l, -a, -al
-         [files/directory]: file/directory names with spaces also supported (enclose in "")
+   /**
+    *  ls: 
+    *     syntax: ls [options] [files/directory]
+    *     [options]: -l, -a, -al
+    *     [files/directory]: file/directory names with spaces also supported (enclose in "")
    */
    else if (!strcmp(command[cmd].command, "ls")) {
       ls(command[cmd]);
    }
 
-   /*
-      cd:
-         syntax: cd [directory]
-         [directory]: directory names with spaces also supported (enclose in "")
+   /**
+    *  cd:
+    *     syntax: cd [directory]
+    *     [directory]: directory names with spaces also supported (enclose in "")
    */
    else if (!strcmp(command[cmd].command, "cd")) {
       cd(command[cmd]);
    }
 
-   /*
-      echo: 
-         syntax: echo [string]
+   /**
+    *  echo: 
+    *     syntax: echo [string]
    */
    else if (!strcmp(command[cmd].command, "echo")) {
       echo(command[cmd]);
    }
 
-   /*
-      pwd:
-         syntax: pwd
+   /**
+    *  pwd:
+    *     syntax: pwd
    */
    else if (!strcmp(command[cmd].command, "pwd")) {
       getcwd(cur_dir, sizeof(cur_dir));
       fprintf(stderr, "Present Working Directory: %s\n\n", cur_dir);
    }
 
-   /*
-      pinfo:
-         syntax: pinfo [pid]
-         [pid]: if pid is not given, pid of shell will be taken
+   /**
+    *  pinfo:
+    *     syntax: pinfo [pid]
+    *     [pid]: if pid is not given, pid of shell will be taken
    */
    else if (!strcmp(command[cmd].command, "pinfo")) {
       pinfo(command[cmd]);
    }
 
-   /*
-      nightswatch:
-               syntax: nightswatch -n [num_of_seconds] [function]
-               [num_of_seconds]: delay in output (in seconds)
-               [function]: dirty or interrupt
+   /**
+    *  nightswatch:
+    *           syntax: nightswatch -n [num_of_seconds] [function]
+    *           [num_of_seconds]: delay in output (in seconds)
+    *           [function]: dirty or interrupt
    */
    else if (!strcmp(command[cmd].command, "nightswatch")) {
       nightswatch(command[cmd], bckgrnd[cmd]);
    }
 
-   /*
-      history:
-            syntax: history [num]
-            [num]: between 1 and 20 (if out range, will be defaulted to 10)
+   /**
+    *  history:
+    *        syntax: history [num]
+    *        [num]: between 1 and 20 (if out range, will be defaulted to 10)
    */
    else if (!strcmp(command[cmd].command, "history")) {
       history(command[cmd]);
    }
 
-   /*
-      jobs:
-         syntax: jobs
+   /**
+    *  jobs:
+    *     syntax: jobs
    */
   else if(!strcmp(command[cmd].command, "jobs")) {
    jobs(command[cmd]);
   }
 
-  /*
-      kjob:
-         syntax: kjob [job] [signal]
-         [job]: job number from jobs
-         [signal]: signal number
+  /**
+   *   kjob:
+   *      syntax: kjob [job] [signal]
+   *      [job]: job number from jobs
+   *      [signal]: signal number
    */
   else if(!strcmp(command[cmd].command, "kjob")) {
      kjob(command[cmd]);
   }
 
-   /*
-      fg:
-         syntax: fg [job]
-         [job]: if not given, last job will be considered
+   /**
+    *  fg:
+    *     syntax: fg [job]
+    *     [job]: if not given, last job will be considered
    */
    else if(!strcmp(command[cmd].command, "fg")) {
       fg(command[cmd]);
    }
 
-   /*
-      bg:
-         syntax: bg [job]
-         [job]: if not given, last job will be considered
+   /**
+    *  bg:
+    *     syntax: bg [job]
+    *     [job]: if not given, last job will be considered
    */
    else if(!strcmp(command[cmd].command, "bg")) {
       bg(command[cmd]);
    }
 
-   /*
-      overkill: 
-            syntax: overkill
+   /**
+    *  overkill: 
+    *        syntax: overkill
    */
   else if(!strcmp(command[cmd].command, "overkill")) {
      overkill();
   }
-   /*
-      Up arrows:
+
+  /**
+   *  getenv: 
+   *       syntax: getenv [var] 
+   *
+  */
+   else if(!strcmp(command[cmd].command, "getenv")) {
+      get_env(command[cmd]);
+   }
+
+  /**
+   *  setenv: 
+   *       syntax: setenv [var] [value]
+   *       [var]: if var is already set, its value will be overwritten
+   *       [value]: if value is empty string, value will be set to null string
+   *
+  */
+   else if(!strcmp(command[cmd].command, "setenv")) {
+      set_env(command[cmd]);
+   }
+
+  /**
+   *  unsetenv: 
+   *       syntax: unsetenv [var] 
+   *
+  */
+   else if(!strcmp(command[cmd].command, "unsetenv")) {
+      unset_env(command[cmd]);
+   }
+
+   /**
+    *  Up arrows:
    */
    else if(command[cmd].command[0] == '\033') {
       int up_arr = 0, start=0, size=0;
@@ -153,9 +183,9 @@ void execute(int cmd)
       return;
    }
 
-   /* 
-      all other shell commands:
-         syntax: syntax of respective commands
+   /** 
+    *  all other shell commands:
+    *     syntax: syntax of respective commands
    */
    else {
       sys(command[cmd], bckgrnd[cmd]);
