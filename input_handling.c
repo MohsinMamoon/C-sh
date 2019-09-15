@@ -113,23 +113,29 @@ int parse_dir(char ** inp, char** dir, char * cmd, char * final) {
 
     while(inp[in_ind] != NULL) {
         if(inp[in_ind][0] == '-' && !strcmp(cmd, "ls")) {
-            switch (mode)
-            {
-            case 0:
-                if(!strcmp(&inp[in_ind][1], "la") || !strcmp(&inp[in_ind][1], "al")) mode = 3;
-                else if(!strcmp(&inp[in_ind][1], "a")) mode = 2;
-                else if(!strcmp(&inp[in_ind][1], "l")) mode = 1;
-                break;
-            case 1:
-                if(!strcmp(&inp[in_ind][1], "la") || !strcmp(&inp[in_ind][1], "al")) mode = 3;
-                else if(!strcmp(&inp[in_ind][1], "a")) mode = 3;
-                break;
-            case 2:
-                if(!strcmp(&inp[in_ind][1], "la") || !strcmp(&inp[in_ind][1], "al")) mode = 3;
-                else if(!strcmp(&inp[in_ind][1], "l")) mode = 3;
-                break;
-            default:
-                break;
+            for(int i=1; i<strlen(inp[in_ind]); i++) {
+                switch (mode)
+                {
+                case 0:
+                    if(inp[in_ind][i] == 'l') mode = 1;
+                    else if(inp[in_ind][i] == 'a') mode = 2;
+                    else mode = 4;
+                    break;
+                case 1:
+                    if(inp[in_ind][i] == 'a') mode = 3;
+                    else if(inp[in_ind][i] == 'l') mode = 1;
+                    else mode = 4;
+                    break;
+                case 2:
+                    if(inp[in_ind][i] == 'l') mode = 3;
+                    else if(inp[in_ind][i] == 'a') mode = 2;
+                    else mode = 4;
+                    break;
+                case 3:
+                    if(inp[in_ind][i] != 'a' && inp[in_ind][i] != 'l') mode = 4;
+                default:
+                    break;
+                }
             }
             in_ind++;
             continue;

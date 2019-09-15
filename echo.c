@@ -17,7 +17,7 @@ void echo(cmd command) {
             printf("%s ", command.arguments[i]);
             i++;
         }
-        printf("\n\n");
+        printf("\n");
         exit(0);
     }
     else {

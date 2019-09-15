@@ -87,6 +87,9 @@ void ls(cmd command) {
             a_flag = 1;
             l_flag = 1;
             break;
+        case 4:
+            fprintf(stderr, "Error: Invalid flags\n");
+            return;
         default:
             break;
         }
@@ -111,7 +114,6 @@ void ls(cmd command) {
                 fprintf(stderr, "ls: could not access: File or Directory does not exist!\n");
                 continue;
             }
-            printf("\n");
             if(S_ISDIR(st.st_mode)) {
                 if(dir[1] != NULL) printf("%s:\n", token);
                 DIR *D = opendir(dir[i]);
@@ -122,7 +124,7 @@ void ls(cmd command) {
                 if(!l_flag) printf("%s\n", token);
                 p_ls(token, st);            
             }
-            printf("\n\n");
+            printf("\n");
         }
         exit(0);
     }
