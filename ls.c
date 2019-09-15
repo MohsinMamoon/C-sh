@@ -89,7 +89,7 @@ void ls(cmd command) {
             break;
         case 4:
             fprintf(stderr, "Error: Invalid flags\n");
-            return;
+            exit(1);
         default:
             break;
         }
