@@ -27,6 +27,7 @@ void up_exec(cmd comm) {
         input[size] = '\0';
         display_shell();
         printf("%s\n", input);
+        if(input[0] != '\033' && input[0] != '\f'&& input[0] != '\0') add_to_hist(input, size);
         
         // Reset variables and add to history
         pipe_no =  0;
@@ -56,6 +57,7 @@ void up_exec(cmd comm) {
     }
     else if (pid > 0) {
         wait(NULL);
+        init_hist();
     }
     else {
         fprintf(stderr, "Forking error!\n");
