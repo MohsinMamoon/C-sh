@@ -47,3 +47,4 @@ void overkill();
 void get_env(cmd command);
 void set_env(cmd command);
 void unset_env(cmd command);
+void up_exec(cmd comm);

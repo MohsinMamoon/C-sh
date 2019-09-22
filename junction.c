@@ -163,23 +163,7 @@ void execute(int cmd)
     *  Up arrows:
    */
    else if(command[cmd].command[0] == '\033') {
-      int up_arr = 0, start=0, size=0;
-      char s[5];
-      for(int i=2; i<strlen(command[cmd].command); i += 3){
-         if(command[cmd].command[i] == 'A') up_arr++;
-      }
-      for(int i=strlen(his)-2, j=0; i>=0; i--) {
-         if(his[i] == '+') j++;
-         if(j == up_arr) {
-            start = i+1;
-            break;
-         }
-      }
-      for(int i=start; i<strlen(his); i++) {
-         if(his[i] == '+') break;
-         size++;
-      }
-      write(1, &his[start], size);
+      up_exec(command[cmd]);
       return;
    }
 
