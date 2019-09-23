@@ -171,7 +171,7 @@ void execute(int cmd)
     *    syntax: cronjob -c <command> -t <period> -p <total time>
    */
   else if(!strcmp(command[cmd].command, "cronjob")){
-     cronjob(command[cmd]);
+     cronjob(command[cmd], bckgrnd[cmd]);
   }
  
    /** 

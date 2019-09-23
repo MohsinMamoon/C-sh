@@ -48,4 +48,4 @@ void get_env(cmd command);
 void set_env(cmd command);
 void unset_env(cmd command);
 void up_exec(cmd comm);
-void cronjob(cmd comd);
+void cronjob(cmd comd, _Bool back);

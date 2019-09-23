@@ -1,7 +1,7 @@
 #include "defs.h"
 #include "decl.h"
 
-void cronjob(cmd comd) {
+void cronjob(cmd comd, _Bool back) {
     int period = 0, total = 0, cmd_ind;
     for(int i=0; comd.arguments[i] != NULL; i++) {
         if(!strcmp(comd.arguments[i], "-t")) {
@@ -45,11 +45,41 @@ void cronjob(cmd comd) {
             command[cmd_num+1].arguments[j] = comd.arguments[i];
         }
     }
+    int pid = fork();
+    
+    if(pid != 0) {    
+        if(comd.pipe_out != -1) close(pipe_fd[comd.pipe_out]);
 
-    for(int i=0; i<=total; i += period) {
-        execute(cmd_num+1);
-        printf("\n");
-        if(i != total) sleep(period);
+        if(!back){ 
+            waitpid(pid, NULL, WUNTRACED);
+        }
+        if(back || !kill(pid, 0)) {
+            add_job(pid);
+        }
     }
-    return;
+    else if(pid == 0) {
+        signal(SIGINT, SIG_DFL);
+        signal(SIGTSTP, back_send);
+
+        if(comd.pipe_in != -1 || comd.pipe_out != -1) {
+            if(comd.pipe_in != -1) dup2(pipe_fd[comd.pipe_in], 0);
+            if(comd.pipe_out != -1) dup2(pipe_fd[comd.pipe_out], 1);
+            for(int i=0; i<2*pipe_no; i++) {
+                close(pipe_fd[i]);
+            }
+        }
+        
+        if(back) setpgid(0,0);
+        
+        for(int i=0; i<=total; i += period) {
+            execute(cmd_num+1);
+            printf("\n");
+            if(i != total) sleep(period);
+        }
+        exit(0);
+    }
+    else {
+        fprintf(stderr, "Forking error!\n");
+        return;
+    }
 }
