@@ -1,2 +1,2 @@
 20
-history+jobs+psps+ps+kill -9 30132+nightswatch -n 1 dirty &+kjob 9 1+kjob 1 9+hi+ls+gdb ./shell+q+q+ls+history+jobs+kill -9 8054+ps+cat h+q+
+cronjob -c ls -t 3 -p 6+cronjob -c ls -l -t 3 -p 6+ls+mkdir 3+mkdir 3+rmdir 3+ps+cronjob -c ps -t 3 -p 6+history+cronjob -c ps -t 3 -p 6+cronjob -c ps -t 3 -p 6+make+q+q+q+make+history+cronjob -c ps -t 3 -p 6+cronjob -c ps -t 1 -p 8+exit+
