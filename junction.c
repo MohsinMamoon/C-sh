@@ -164,9 +164,16 @@ void execute(int cmd)
    */
    else if(command[cmd].command[0] == '\033') {
       up_exec(command[cmd]);
-      return;
    }
 
+   /**
+    * cronjob:
+    *    syntax: cronjob -c <command> -t <period> -p <total time>
+   */
+  else if(!strcmp(command[cmd].command, "cronjob")){
+     cronjob(command[cmd]);
+  }
+ 
    /** 
     *  all other shell commands:
     *     syntax: syntax of respective commands
