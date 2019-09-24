@@ -48,7 +48,12 @@ void unset_env(cmd command) {
         fprintf(stderr, "Error: Too few arguments!\n");
         return;
     }
-    if(unsetenv(command.arguments[0]) == 0) {
+
+    if (getenv(command.arguments[0]) == NULL) {
+        fprintf(stderr, "Variable %s not set!\n", command.arguments[0]);
+        return;
+    }
+    else if(unsetenv(command.arguments[0]) == 0) {
         fprintf(stderr, "%s unset\n", command.arguments[0]);
     }
     else {
