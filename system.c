@@ -17,7 +17,7 @@ void sys(cmd command, _Bool back) {
             waitpid(pid, NULL, WUNTRACED);
         }
         if(back || !kill(pid, 0)) {
-            add_job(pid);
+            add_job(pid, command);
         }
     }
     else if(pid == 0) {

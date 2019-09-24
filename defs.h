@@ -28,7 +28,7 @@ void piping_begin(cmd command);
 void out_close(cmd command);
 
 // Background jobs related
-void add_job(int pid);
+void add_job(int pid, cmd cmmd);
 void rem_job(int job_id);
 
 // Supported commands

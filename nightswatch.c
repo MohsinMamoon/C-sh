@@ -101,7 +101,7 @@ void nightswatch (cmd command, _Bool back) {
                 tcsetattr(0, TCSANOW, &orig);
             }
             if(back || !kill(pid, 0)) {
-                add_job(pid);
+                add_job(pid, command);
             }
         }
         else if(pid == 0) {

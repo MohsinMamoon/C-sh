@@ -1,22 +1,22 @@
 #include "defs.h"
 #include "decl.h"
 
-void add_job(int pid){
+void add_job(int pid, cmd cmmd){
     char command[500];
-    int start=0;
-    for(int i=strlen(his)-2; i>=0; i--) {
-        if(his[i] == '+') {
-            start = i+1;
-            break;
-        }
+    int i=0;
+    for(i=0; i < strlen(cmmd.command); i++) {
+        command[i] = cmmd.command[i];
     }
-    snprintf(command, strlen(his)-start, "%s", &his[start]);
-    for(int i=strlen(command)-1; i>=0; i--) {
-        if(command[i] != ' ') {
-            if(command[i] == '&') command[i] = '\0';
-            break;
+    command[i++] = ' ';
+    for(int j=0; ;j++) {
+        if(cmmd.arguments[j] == NULL) break;
+        for(int k=0; k<strlen(cmmd.arguments[j]); k++) {
+            command[i++] = cmmd.arguments[j][k];
         }
+        command[i++ ] = ' ';
     }
+    command[i] = '\0';
+   
     job new;
     strcpy(new.job_name, command);
     new.job_id = ++no_of_jobs;
