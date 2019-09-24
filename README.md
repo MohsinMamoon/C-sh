@@ -35,8 +35,8 @@
         <dt>Syntax: </dt>
         <dd>
             <ul>
-                <li> `clear` </li>
-                <li> `Ctrl-L` </li>
+                <li> <code>clear</code> </li>
+                <li> <code>Ctrl-L</code> </li>
         </dd>
     </dl>
 </dd>
@@ -48,9 +48,9 @@
         <dt>Syntax: </dt>
         <dd>
             <ul>
-                <li> `quit` </li>
-                <li> `exit` </li>
-                <li> `q` </li>
+                <li> <code>quit</code> </li>
+                <li> <code>exit</code> </li>
+                <li> <code>q</code> </li>
         </dd>
     </dl>
 </dd>
@@ -62,7 +62,7 @@
         <dt>Syntax: </dt>
         <dd>
             <ul>
-                <li>`ls [-al] [dir\file path]`</li>
+                <li><code>ls [-al] [dir\file path]</code></li>
             </ul>
         </dd>
         <dt>Note: </dt>
@@ -82,7 +82,7 @@
         <dt>Syntax: </dt>
         <dd>
             <ul>
-                <li>`cd [directory]` </li>
+                <li><code>cd [directory]</code> </li>
             </ul>
         </dd>
         <dt>Note: </dt>
@@ -101,7 +101,7 @@
         <dt>Syntax: </dt>
         <dd>
             <ul>
-                <li>`echo \<phrase\>` </li>
+                <li><code>echo < phrase ></code> </li>
             </ul>
         </dd>
         <dt>Note: </dt>
@@ -120,7 +120,7 @@
         <dt>Syntax: </dt>
         <dd>
             <ul>
-                <li>`pwd`</li>
+                <li><code>pwd</code></li>
             </ul>
         </dd>
     </dl>
@@ -133,7 +133,7 @@
         <dt>Syntax: </dt>
         <dd>
             <ul>
-                <li>pinfo [pid]</li>
+                <li><code>pinfo [pid]</code></li>
             </ul>
         </dd>
         <dt>Note: </dt>
@@ -152,7 +152,7 @@
         <dt>Syntax: </dt>
         <dd>
             <ul>
-                <li>`nightswatch -n \<seconds\> \<mode\>`</li>
+                <li><code>nightswatch -n < seconds > < mode ></code></li>
             </ul>
         </dd>
         <dt>Options: </dt>
@@ -172,7 +172,7 @@
         <dt>Syntax: </dt>
         <dd>
             <ul>
-                <li>`history [number]`</li>
+                <li><code>history [number]</code></li>
             </ul>
         </dd>
         <dt>Options: </dt>
@@ -197,7 +197,7 @@
         <dt>Syntax: </dt>
         <dd>
             <ul>
-                <li>`jobs`</li>
+                <li><code>jobs</code></li>
             </ul>
         </dd>
         <dt>Note: </dt>
@@ -211,7 +211,7 @@
         <dt>Syntax: </dt>
         <dd>
             <ul>
-                <li>`kjob \<job\> \<signal\>`</li>
+                <li><code>kjob < job > < signal ></code></li>
             </ul>
         </dd>
         <dt>Options: </dt>
@@ -231,7 +231,7 @@
         <dt>Syntax: </dt>
         <dd>
             <ul>
-                <li>`fg [job]`</li>
+                <li><code>fg [job]</code></li>
             </ul>
         </dd>
         <dt>Options: </dt>
@@ -256,7 +256,7 @@
         <dt>Syntax: </dt>
         <dd>
             <ul>
-                <li>`bg [job]`</li>
+                <li><code>bg [job]</code></li>
             </ul>
         </dd>
         <dt>Options: </dt>
@@ -281,7 +281,7 @@
         <dt>Syntax: </dt>
         <dd>
             <ul>
-                <li>`overkill`</li>
+                <li><code>overkill</code></li>
             </ul>
         </dd>
     </dl>
@@ -294,7 +294,7 @@
         <dt>Syntax: </dt>
         <dd>
             <ul>
-                <li>`getenv \<env\>`</li>
+                <li><code>getenv < env ></code></li>
             </ul>
         </dd>
         <dt>Options: </dt>
@@ -313,7 +313,7 @@
         <dt>Syntax: </dt>
         <dd>
             <ul>
-                <li>`setenv \<env\> \<value\>` </li>
+                <li><code>setenv < env > < value ></code> </li>
             </ul>
         </dd>
         <dt>Options: </dt>
@@ -333,7 +333,7 @@
         <dt>Syntax: </dt>
         <dd>
             <ul>
-                <li>`unsetenv \<env\>`</li>
+                <li><code>unsetenv < env ></code></li>
             </ul>
         </dd>
         <dt>Options: </dt>
@@ -352,7 +352,7 @@
         <dt>Syntax: </dt>
         <dd>
             <ul>
-                <li>`cronjob -c \<command\> -t \<period\> -p \<total\></li>
+                <li><code>cronjob -c < command > -t < period > -p < total ></code></li>
             </ul>
         </dd>
         <dt>Options: </dt>
@@ -389,8 +389,8 @@
 
 ## Running:
 <ol>
-<li> Clone this repository: `git clone addr` </li>
-<li> Cd into the directory: `cd C-sh` </li>
-<li> Compile the code: `make` </li>
-<li> Run the shell: `./shell` </li>
+<li> Clone this repository: <code>git clone addr</code> </li>
+<li> Cd into the directory: <code>cd C-sh</code> </li>
+<li> Compile the code: <code>make</code> </li>
+<li> Run the shell: <code>./shell</code> </li>
 </ol>
