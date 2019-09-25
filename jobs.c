@@ -68,34 +68,44 @@ void jobs(cmd command){
                 switch (stat_in[0]) {
                 case 'R':
                     strncpy(st, "Running", 7);
+                    st[8] = '\0';
                     break;
                 case 'S':
                     strncpy(st, "Sleeping", 8);
+                    st[9] = '\0';
                     break;
                 case 'D':
                     strncpy(st, "Waiting", 7);
+                    st[8] = '\0';
                     break;
                 case 'Z':
                     strncpy(st, "Zombie", 6);
+                    st[7] = '\0';
                     break;
                 case 'T':
                     strncpy(st, "Stopped", 7);
+                    st[8] = '\0';
                     break;
                 case 't':
                     strncpy(st, "Tracing stop", 12);
+                    st[13] = '\0';
                     break;
                 case 'X':
                 case 'x':
                     strncpy(st, "Dead", 4);
+                    st[5] = '\0';
                     break;
                 case 'K':
                     strncpy(st, "Wakekill", 8);
+                    st[9] = '\0';
                     break;
                 case 'W':
                     strncpy(st, "Waking", 6);
+                    st[7] = '\0';
                     break;
                 case 'P':
                     strncpy(st, "Parked", 6);
+                    st[7] = '\0';
                     break;
                 }
 

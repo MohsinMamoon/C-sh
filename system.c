@@ -6,7 +6,7 @@ void sys(cmd command, _Bool back) {
     args[0] = command.command;
     for(int i=0;; i++) {
         if((args[i+1] = command.arguments[i]) == NULL) break;
-}
+    }
 
     int pid = fork();
 
