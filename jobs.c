@@ -24,7 +24,7 @@ void add_job(int pid, cmd cmmd){
     new.in_back = 1;
 
     background[(no_of_jobs - 1) % 1000] = new;
-    printf("[%d] %s (%d) sent to background\n", no_of_jobs, command, pid);
+    if(strncmp(command, "cronjob", 7)) printf("[%d] %s (%d) sent to background\n", no_of_jobs, command, pid);
     return;
 }
 

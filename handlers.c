@@ -6,8 +6,10 @@ void back_end(int sig) {
     for(int i=0; i<no_of_jobs; i++) {
         if(background[i%1000].in_back && (p_id = waitpid(background[i].job_pid, &ext_stat, WUNTRACED | WNOHANG)) > 0) {
             if(WIFEXITED(ext_stat)) {
-                fprintf(stderr, "%s with pid %d terminated ", background[i].job_name, background[i].job_pid);
-                fprintf(stderr, "normally with status %d!\n", WEXITSTATUS(ext_stat));
+                if(strncmp(background[i].job_name, "cronjob", 7)){
+                    fprintf(stderr, "%s with pid %d terminated ", background[i].job_name, background[i].job_pid);
+                    fprintf(stderr, "normally with status %d!\n", WEXITSTATUS(ext_stat));
+                }
                 rem_job(background[i].job_id);
             }
             else if(WIFSIGNALED(ext_stat)) {

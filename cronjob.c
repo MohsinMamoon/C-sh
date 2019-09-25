@@ -50,12 +50,7 @@ void cronjob(cmd comd, _Bool back) {
     if(pid != 0) {    
         if(comd.pipe_out != -1) close(pipe_fd[comd.pipe_out]);
 
-        if(!back){ 
-            waitpid(pid, NULL, WUNTRACED);
-        }
-        if(back || !kill(pid, 0)) {
-            add_job(pid, comd);
-        }
+        add_job(pid, comd);
     }
     else if(pid == 0) {
         signal(SIGINT, SIG_DFL);
@@ -69,12 +64,12 @@ void cronjob(cmd comd, _Bool back) {
             }
         }
         
-        if(back) setpgid(0,0);
+        setpgid(0,0);
         
-        for(int i=0; i<=total; i += period) {
+        for(int i=0; i<total; i += period) {
+            sleep(period);
             execute(cmd_num+1);
             printf("\n");
-            if(i != total) sleep(period);
         }
         exit(0);
     }
