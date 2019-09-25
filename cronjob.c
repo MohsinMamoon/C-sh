@@ -2,7 +2,7 @@
 #include "decl.h"
 
 void cronjob(cmd comd, _Bool back) {
-    int period = 0, total = 0, cmd_ind;
+    int period = -1, total = -1, cmd_ind;
     for(int i=0; comd.arguments[i] != NULL; i++) {
         if(!strcmp(comd.arguments[i], "-t")) {
             if(comd.arguments[i+1] != NULL) {
