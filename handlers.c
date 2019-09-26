@@ -26,8 +26,17 @@ void back_send(int sig) {
     kill(getpid(), SIGSTOP);
 }
 
+void EOF_IGN() {
+    struct termios old, new;
+    tcgetattr(0,&old);
+    new = old;
+    new.c_cc[VEOF] = 3;
+    tcsetattr(0,TCSANOW,&new);
+}
+
 void signal_setup() {
     signal(SIGCHLD, back_end);
     signal(SIGINT, SIG_IGN);
     signal(SIGTSTP, SIG_IGN);
+    EOF_IGN();
 }
