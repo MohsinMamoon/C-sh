@@ -10,7 +10,7 @@ void sys(cmd command, _Bool back) {
 
     int pid = fork();
 
-    if(pid != 0) {
+    if(pid != 0)    {
         // Parent
         out_close(command);
         if(!back) {
@@ -22,6 +22,7 @@ void sys(cmd command, _Bool back) {
     }
     else if(pid == 0) {
         // Child
+        signal(SIGTSTP, SIG_DFL);
         piping_begin(command);
         
         if(back) setpgid(0,0);
